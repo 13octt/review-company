@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: company
+  labels:
+    app: company
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: company
+      labels:
+        app: company
+    spec:
+      containers:
+        - name: company
+          image: lambaoduy1310/companyms:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: company
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: company
+spec:
+  selector:
+    app: company
+  ports:
+    - port: 80
+      targetPort: 8081
+  type: LoadBalancer

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job
+  labels:
+    app: job
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: job
+      labels:
+        app: job
+    spec:
+      containers:
+        - name: job
+          image: lambaoduy1310/jobms:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+              resources:
+          requests:
+            memory: "1Gi"  
+          limits:
+            memory: "2Gi"
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: job
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: job
+spec:
+  selector:
+    app: job
+  ports:
+    - port: 80
+      targetPort: 8082

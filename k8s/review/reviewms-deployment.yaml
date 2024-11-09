@@ -1,0 +1,41 @@
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: review
+    labels:
+      app: review
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        name: review
+        labels:
+          app: review
+      spec:
+        containers:
+          - name: review
+            image: lambaoduy1310/reviewms:latest
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 8083
+            env:
+              - name: SPRING_PROFILES_ACTIVE
+                value: k8s
+        restartPolicy: Always
+    selector:
+      matchLabels:
+        app: review
+
+---
+
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: review
+  spec:
+    selector:
+      app: review
+    ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8083
