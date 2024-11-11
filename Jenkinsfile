@@ -38,8 +38,9 @@ pipeline {
                 dir('companyms') {
                     script {
                         sh 'mvn clean'
-                        sh 'chmod +x ./mvnw'
                         sh './mvnw -N io.takari:maven:wrapper || true'
+                        sh 'chmod +x ./mvnw'
+                        
                         sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/companyms:${IMAGE_TAG}'
                     }
                 }
@@ -51,8 +52,9 @@ pipeline {
                 dir('reviewms') {
                     script {
                         sh 'mvn clean'
-                        sh 'chmod +x ./mvnw'
                         sh './mvnw -N io.takari:maven:wrapper || true'
+                        sh 'chmod +x ./mvnw'
+
                         sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG}'
                     }
                 }
@@ -64,8 +66,9 @@ pipeline {
                 dir('jobms') {
                     script {
                         sh 'mvn clean'
-                        sh 'chmod +x ./mvnw'
                         sh './mvnw -N io.takari:maven:wrapper || true'
+                        sh 'chmod +x ./mvnw'
+                        
                         sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
                     }
                 }
@@ -175,6 +178,7 @@ pipeline {
             sh "docker rmi ${DOCKER_REGISTRY}/companyms:${IMAGE_TAG} || true"
             sh "docker rmi ${DOCKER_REGISTRY}/jobms:${IMAGE_TAG} || true"
             sh "docker rmi ${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG} || true"
+            cleanWs()
         }
         success {
             echo 'Pipeline completed successfully!'
