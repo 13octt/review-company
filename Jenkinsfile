@@ -15,7 +15,8 @@ pipeline {
         SONAR_KEY_REVIEW    = 'Review-MS'
         SONAR_URL           = 'http://192.168.23.1:9000'
         DOCKER_REGISTRY     = 'lambaoduy1310'
-        IMAGE_TAG           = "v1.${BUILD_NUMBER}"  
+        IMAGE_TAG           = 'latest'
+        // IMAGE_TAG           = "v1.${BUILD_NUMBER}"  
     }
 
     stages {
