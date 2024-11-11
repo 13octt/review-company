@@ -37,6 +37,7 @@ pipeline {
             steps {
                 dir('companyms') {
                     script {
+                        sh 'mvn clean'
                         sh 'chmod +x ./mvnw'
                         sh './mvnw -N io.takari:maven:wrapper || true'
                         sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/companyms:${IMAGE_TAG}'
@@ -49,6 +50,7 @@ pipeline {
             steps {
                 dir('reviewms') {
                     script {
+                        sh 'mvn clean'
                         sh 'chmod +x ./mvnw'
                         sh './mvnw -N io.takari:maven:wrapper || true'
                         sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG}'
@@ -61,6 +63,7 @@ pipeline {
             steps {
                 dir('jobms') {
                     script {
+                        sh 'mvn clean'
                         sh 'chmod +x ./mvnw'
                         sh './mvnw -N io.takari:maven:wrapper || true'
                         sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
