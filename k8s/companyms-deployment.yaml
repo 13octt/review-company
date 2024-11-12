@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: company
-          image: lambaoduy1310/companyms:latest
+          image: lambaoduy1310/companyms:v1.4
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
