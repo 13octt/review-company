@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    // tools {
-    //     jdk 'jdk17'
-    //     nodejs 'node18'
-    // }
-
     stages {
         stage('Clean workspace'){
             steps{
@@ -21,10 +16,14 @@ pipeline {
 
         stage('DEPLOY TO K8S') {
             steps {
-                withKubeConfig([credentialsId: 'k8s-config', serverUrl: 'https://kubernetes.docker.internal:6443']) {
+                withKubeConfig([
+                        credentialsId: 'k8s-config', 
+                        serverUrl: 'https://kubernetes.docker.internal:6443',
+                        namespace: 'jenkins', 
+                        contextName: 'minikube'
+                ]) {
                     sh 'kubectl version'
                     sh 'kubectl apply -f k8s/'
-                    sh 'kubectl get all'
                 }
             }
         }
