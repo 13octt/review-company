@@ -29,9 +29,9 @@ pipeline {
                     echo 'Creating database'
 
                     sh '''
-                    kubectl exec postgres-0 -- psql -U embarkx -c "CREATE DATABASE job;"
-                    kubectl exec postgres-0 -- psql -U embarkx -c "CREATE DATABASE review;"
-                    kubectl exec postgres-0 -- psql -U embarkx -c "CREATE DATABASE company;"
+                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE job;"
+                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE review;"
+                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE company;"
                     '''
                 }
             }
