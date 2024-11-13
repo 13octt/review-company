@@ -18,14 +18,15 @@ pipeline {
             steps {
                 withKubeConfig([
                         credentialsId: 'k8s-config', 
-                        serverUrl: 'https://kubernetes.docker.internal:6443',
+                        serverUrl: 'https://192.168.49.2:6443',
                         namespace: 'jenkins', 
                         contextName: 'minikube'
                 ]) {
                     sh 'kubectl version'
-                    sh 'kubectl config get-contexts'
                     sh 'kubectl get ns'
                     sh 'kubectl config use-context minikube'
+                    sh 'kubectl config set-context minikube --namespace=jenkins'
+                    sh 'kubectl config get-contexts'
                 }
             }
         }
@@ -34,9 +35,9 @@ pipeline {
             steps {
                 withKubeConfig([
                         credentialsId: 'k8s-config', 
-                        serverUrl: 'https://kubernetes.docker.internal:6443',
+                        serverUrl: 'https://192.168.49.2:6443',
                         namespace: 'jenkins', 
-                        contextName: 'minikube'
+                        contextName: 'minikube',
                 ]) {
                     sh 'kubectl apply -f k8s/'
                 }
