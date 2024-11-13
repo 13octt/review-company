@@ -24,9 +24,10 @@ pipeline {
                     sh 'kubectl version'
                     sh 'kubectl get ns'
                     sh 'kubectl config get-contexts'
-                    
+
                     sh 'kubectl config use-context minikube'
                     sh 'kubectl config set-context minikube --namespace=jenkins'
+                }
             }
         }
 
