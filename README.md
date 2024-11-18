@@ -86,3 +86,8 @@
 
 ## Minikube 
 
+<p align="center">
+  <img src="images/k8s/get-resource-k8s.png" alt="Docker Hub">
+  <br>
+  <em>Docker Hub</em>
+</p>
