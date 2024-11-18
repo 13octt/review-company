@@ -15,7 +15,6 @@ pipeline {
         SONAR_KEY_REVIEW    = 'Review-MS'
         SONAR_URL           = 'http://192.168.23.1:9000'
         DOCKER_REGISTRY     = 'lambaoduy1310'
-        // IMAGE_TAG           = 'latest'
         IMAGE_TAG           = "v1.${BUILD_NUMBER}"  
     }
 
@@ -96,7 +95,6 @@ pipeline {
         always {
             echo 'Cleaning up local Docker images...'
             sh "docker rmi ${DOCKER_REGISTRY}/companyms:${IMAGE_TAG} || true"
-            // cleanWs()
         }
         success {
             echo 'Pipeline completed successfully!'
