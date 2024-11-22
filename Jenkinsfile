@@ -17,10 +17,10 @@ pipeline {
         stage('DEPLOY SERVICES TO K8S') {
             steps {
                 withKubeConfig([
-                        credentialsId: 'k8s-config', 
-                        serverUrl: 'https://kubernetes.docker.internal:6443',
+                        credentialsId: 'hyperv', 
+                        serverUrl: 'https://172.22.228.71:8443',
                         namespace: 'jenkins', 
-                        contextName: 'k8s',
+                        contextName: 'minikube',
                 ]) {
                     sh 'kubectl apply -f k8s/rabbit-deployment.yaml'
                     sh 'kubectl apply -f k8s/postgresql-deployment.yaml'
@@ -40,10 +40,10 @@ pipeline {
         stage('DEPLOY TO K8S') {
             steps {
                 withKubeConfig([
-                        credentialsId: 'k8s-config', 
-                        serverUrl: 'https://kubernetes.docker.internal:6443',
+                        credentialsId: 'hyperv', 
+                        serverUrl: 'https://172.22.228.71:6443',
                         namespace: 'jenkins', 
-                        contextName: 'k8s',
+                        contextName: 'minikube',
                 ]) {
                     echo 'Checking version, namespace, context...'
                     sh 'kubectl version'
