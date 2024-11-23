@@ -25,14 +25,6 @@ pipeline {
                     sh 'kubectl apply -f k8s/rabbit-deployment.yaml'
                     sh 'kubectl apply -f k8s/postgresql-deployment.yaml'
                     sh 'kubectl apply -f k8s/zipkin-deployment.yaml'
-
-                    echo 'Creating database'
-
-                    sh '''
-                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE job;"
-                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE review;"
-                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE company;"
-                    '''
                 }
             }
         }
@@ -49,6 +41,13 @@ pipeline {
                     sh 'kubectl version'
                     sh 'kubectl get ns'
                     sh 'kubectl config get-contexts'
+
+                    echo 'Creating database'
+                    sh '''
+                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'job';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE job;"
+                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'review';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE review;"
+                        kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'company';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE company;"
+                    '''
 
                     echo 'Deploy to k8s'
                     sh 'kubectl apply -f k8s/companyms-deployment.yaml'
