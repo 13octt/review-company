@@ -41,7 +41,7 @@ pipeline {
             steps {
                 withKubeConfig([
                         credentialsId: 'hyperv', 
-                        serverUrl: 'https://172.22.228.71:6443',
+                        serverUrl: 'https://172.22.228.71:8443',
                         namespace: 'jenkins', 
                         contextName: 'minikube',
                 ]) {
