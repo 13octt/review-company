@@ -55,6 +55,7 @@
                                     ${SCANNER_HOME}/bin/sonar-scanner \
                                         -Dsonar.projectKey=${SONAR_KEY_COMPANY} \
                                         -Dsonar.sources=. \
+                                        -Dsonar.login=sqp_dfa18479c83b1f9115a95e166a9c60acbab5e969 \
                                         -Dsonar.java.binaries=target/classes \
                                 """
                             }
