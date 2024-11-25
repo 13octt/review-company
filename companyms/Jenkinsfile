@@ -55,7 +55,6 @@
                                     ${SCANNER_HOME}/bin/sonar-scanner \
                                         -Dsonar.projectKey=${SONAR_KEY_COMPANY} \
                                         -Dsonar.sources=. \
-                                        -Dsonar.host.url=${SONAR_URL} \
                                         -Dsonar.java.binaries=target/classes \
                                 """
                             }
