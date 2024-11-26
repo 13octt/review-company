@@ -49,20 +49,14 @@
             stage('SonarQube Analys for Company MS') {
                 steps {
                     dir('companyms'){
-                        // script {
-                        //     withSonarQubeEnv('sonar-server') {
-                        //         sh '${SCANNER_HOME}/bin/sonar-scanner --version'
-                        //         sh """
-                        //             ${SCANNER_HOME}/bin/sonar-scanner \
-                        //                 -Dsonar.projectKey=${SONAR_KEY_COMPANY} \
-                        //                 -Dsonar.sources=. \
-                        //                 -Dsonar.login=sqp_dfa18479c83b1f9115a95e166a9c60acbab5e969 \
-                        //                 -Dsonar.java.binaries=target/classes \
-                        //         """
-                        //     }
-                        // }
-                        withSonarQubeEnv('sonar-server') {
-                            sh "${MVN_HOME}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=Company-MS"
+                        script {
+                            withSonarQubeEnv('sonar-server') {
+                                sh '${SCANNER_HOME}/bin/sonar-scanner --version'
+                                sh """
+                                    ${SCANNER_HOME}/bin/sonar-scanner \
+                                        -Dsonar.java.binaries=target/classes \
+                                """
+                            }
                         }
                     }
                 }
