@@ -14,13 +14,20 @@ spec:
     spec:
       containers:
         - name: job
-          image: lambaoduy1310/jobms:v1.2
+          image: lambaoduy1310/jobms:v3.1
           imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
       restartPolicy: Always
   selector:
     matchLabels:
@@ -38,3 +45,4 @@ spec:
   ports:
     - port: 80
       targetPort: 8082
+  type: LoadBalancer

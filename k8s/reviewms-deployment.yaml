@@ -14,13 +14,20 @@
       spec:
         containers:
           - name: review
-            image: lambaoduy1310/reviewms:v1.5
+            image: lambaoduy1310/reviewms:v3.4
             imagePullPolicy: Always
             ports:
               - containerPort: 8083
             env:
               - name: SPRING_PROFILES_ACTIVE
                 value: k8s
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "250m"
+              limits:
+                memory: "1Gi"
+                cpu: "500m"
         restartPolicy: Always
     selector:
       matchLabels:
@@ -39,3 +46,4 @@
       - protocol: TCP
         port: 80
         targetPort: 8083
+    type: LoadBalancer
