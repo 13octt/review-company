@@ -53,9 +53,6 @@ pipeline {
                             sh '${SCANNER_HOME}/bin/sonar-scanner --version'
                             sh """
                                 ${SCANNER_HOME}/bin/sonar-scanner \
-                                    -Dsonar.projectKey=${SONAR_KEY_JOB} \
-                                    -Dsonar.sources=. \
-                                    -Dsonar.host.url=${SONAR_URL} \
                                     -Dsonar.java.binaries=target/classes \
                             """
                         }
