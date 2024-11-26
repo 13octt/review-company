@@ -22,8 +22,8 @@ pipeline {
                         namespace: 'jenkins', 
                         contextName: 'default',
                 ]) {
-                    sh 'k3s kubectl apply -f k8s/rabbit-deployment.yaml'
-                    sh 'k3s kubectl apply -f k8s/postgresql-deployment.yaml'
+                    sh 'sudo k3s kubectl apply -f k8s/rabbit-deployment.yaml'
+                    sh 'sudo k3s kubectl apply -f k8s/postgresql-deployment.yaml'
                 }
             }
         }
@@ -37,21 +37,21 @@ pipeline {
                         contextName: 'default',
                 ]) {
                     echo 'Checking version, namespace, context...'
-                    sh 'k3s kubectl version'
-                    sh 'k3s kubectl get ns'
-                    sh 'k3s ubectl config get-contexts'
+                    sh 'sudo k3s kubectl version'
+                    sh 'sudo k3s kubectl get ns'
+                    sh 'sudo k3s ubectl config get-contexts'
 
                     echo 'Creating database'
                     sh '''
-                        k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'job';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE job;"
-                        k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'review';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE review;"
-                        k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'company';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE company;"
+                        sudo k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'job';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE job;"
+                        sudo k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'review';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE review;"
+                        sudo k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'company';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE company;"
                     '''
 
                     echo 'Deploy to k8s'
-                    sh 'k3s kubectl apply -f k8s/companyms-deployment.yaml'
-                    sh 'k3s kubectl apply -f k8s/jobms-deployment.yaml'
-                    sh 'k3s kubectl apply -f k8s/reviewms-deployment.yaml'
+                    sh 'sudo k3s kubectl apply -f k8s/companyms-deployment.yaml'
+                    sh 'sudo k3s kubectl apply -f k8s/jobms-deployment.yaml'
+                    sh 'sudo k3s kubectl apply -f k8s/reviewms-deployment.yaml'
 
                 }
             }
