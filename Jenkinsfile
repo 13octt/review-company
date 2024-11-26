@@ -14,28 +14,27 @@ pipeline {
             }
         }
 
-        stage('DEPLOY SERVICES TO K8S') {
+        stage('DEPLOY SERVICES TO K3S') {
             steps {
                 withKubeConfig([
-                        credentialsId: 'hyperv', 
-                        serverUrl: 'https://172.22.228.71:8443',
+                        credentialsId: 'k3s', 
+                        serverUrl: 'https://44.194.59.175:8443',
                         namespace: 'jenkins', 
-                        contextName: 'minikube',
+                        contextName: 'default',
                 ]) {
                     sh 'kubectl apply -f k8s/rabbit-deployment.yaml'
                     sh 'kubectl apply -f k8s/postgresql-deployment.yaml'
-                    sh 'kubectl apply -f k8s/zipkin-deployment.yaml'
                 }
             }
         }
 
-        stage('DEPLOY TO K8S') {
+        stage('DEPLOY APPLICATIONS TO K3S') {
             steps {
                 withKubeConfig([
-                        credentialsId: 'hyperv', 
-                        serverUrl: 'https://172.22.228.71:8443',
+                        credentialsId: 'k3s', 
+                        serverUrl: 'https://44.194.59.175:8443',
                         namespace: 'jenkins', 
-                        contextName: 'minikube',
+                        contextName: 'default',
                 ]) {
                     echo 'Checking version, namespace, context...'
                     sh 'kubectl version'
