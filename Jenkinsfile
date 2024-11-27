@@ -39,7 +39,7 @@ pipeline {
                     echo 'Checking version, namespace, context...'
                     sh 'k3s kubectl version'
                     sh 'k3s kubectl get ns'
-                    sh 'k3s ubectl config get-contexts'
+                    sh 'k3s kubectl config get-contexts'
 
                     echo 'Creating database'
                     sh '''
