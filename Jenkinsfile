@@ -18,7 +18,7 @@ pipeline {
             steps {
                 withKubeConfig([
                         credentialsId: 'k3s', 
-                        serverUrl: 'https://52.4.165.255:8443',
+                        serverUrl: 'https://52.4.165.255:6443',
                         namespace: 'jenkins', 
                         contextName: 'default',
                 ]) {
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 withKubeConfig([
                         credentialsId: 'k3s', 
-                        serverUrl: 'https://52.4.165.255:8443',
+                        serverUrl: 'https://52.4.165.255:6443',
                         namespace: 'jenkins', 
                         contextName: 'default',
                 ]) {
