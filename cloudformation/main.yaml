@@ -1,0 +1,42 @@
+Parameters:
+  VpcCIDR:
+    Type: String
+    Default: "192.168.0.0/16"
+  PublicSubnetCIDR:
+    Type: String
+    Default: "192.168.1.0/24"
+  AvailabilityZone:
+    Type: String
+    Default: "us-east-1a"
+  BucketName:
+    Type: String
+    Default: "nhom14projects3bucket"
+
+Resources:
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${BucketName}.s3.us-east-1.amazonaws.com/nhom14/vpc.yaml"
+      Parameters:
+        VpcCIDR: !Ref VpcCIDR
+        PublicSubnetCIDR: !Ref PublicSubnetCIDR
+        AvailabilityZone: !Ref AvailabilityZone
+
+  EC2Stack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${BucketName}.s3.us-east-1.amazonaws.com/nhom14/ec2.yaml"
+      Parameters:
+        PublicSubnetId: !GetAtt VPCStack.Outputs.PublicSubnetId
+        JenkinsK3sSecurityGroup: !GetAtt VPCStack.Outputs.K3sJenkinsSgId
+        GrafanaPrometheusSecurityGroup: !GetAtt VPCStack.Outputs.GrafanaPrometheusSgId
+
+Outputs:
+  VPCId:
+    Value: !GetAtt VPCStack.Outputs.VPCId
+  PublicSubnetId:
+    Value: !GetAtt VPCStack.Outputs.PublicSubnetId
+  JenkinsK3sEC2Id:
+    Value: !GetAtt EC2Stack.Outputs.JenkinsK3sEC2Id
+  GrafanaPrometheusEC2Id:
+    Value: !GetAtt EC2Stack.Outputs.PrometheusGrafanaEC2

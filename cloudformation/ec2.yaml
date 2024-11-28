@@ -1,0 +1,67 @@
+Parameters:
+  PublicSubnetId:
+    Type: String
+  JenkinsK3sSecurityGroup:
+    Type: String
+  GrafanaPrometheusSecurityGroup:
+    Type: String
+  INSTANCETYPE:
+    Type: String
+    Default: "t2.micro"
+  AMI:
+    Type: AWS::EC2::Image::Id
+    Default: "ami-0866a3c8686eaeeba"
+  Environment:
+    Type: String
+    Default: "nhom14-project"
+
+Resources:
+  MyEC2KeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: "nhom14-key"
+
+  JenkinsK3sEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref INSTANCETYPE
+      KeyName: !Ref MyEC2KeyPair
+      ImageId: !Ref AMI
+      SubnetId: !Ref PublicSubnetId
+      SecurityGroupIds:
+        - !Ref JenkinsK3sSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 25  
+            VolumeType: gp2  
+            DeleteOnTermination: true  
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-jenkins-k3s"
+
+  PrometheusGrafanaEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref INSTANCETYPE
+      KeyName: !Ref MyEC2KeyPair
+      ImageId: !Ref AMI
+      SubnetId: !Ref PublicSubnetId
+      SecurityGroupIds:
+        - !Ref GrafanaPrometheusSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 15  
+            VolumeType: gp2  
+            DeleteOnTermination: true  
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-jenkins-k3s"
+
+ 
+Outputs:
+  JenkinsK3sEC2Id:
+    Value: !Ref JenkinsK3sEC2
+  PrometheusGrafanEC2Id:
+    Value: !Ref PrometheusGrafanaEC2

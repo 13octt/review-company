@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: VPC Module
+
+Parameters:
+  VpcCIDR:
+    Type: String
+  PublicSubnetCIDR:
+    Type: String
+  AvailabilityZone:
+    Type: String
+  PublicIP:
+    Type: String
+    Default: "0.0.0.0/0"
+  Environment:
+    Type: String
+    Default: "nhom14-project"
+
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-vpc"
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: !Ref PublicSubnetCIDR
+      AvailabilityZone: !Ref AvailabilityZone
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-public-subnet"
+
+  
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-igw"
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MyVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-public-rtb"
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  JenkinsK3SSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access and port range for load balancer exposure
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 6443
+          ToPort: 6443
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 30000
+          ToPort: 32767
+          CidrIp: !Ref PublicIP
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-jenkins-k3s-sg"
+
+  GrafanaPrometheusSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access and port range for load balancer exposure
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 9090
+          ToPort: 9090
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 9100
+          ToPort: 9100
+          CidrIp: !Ref PublicIP
+        - IpProtocol: tcp
+          FromPort: 30000
+          ToPort: 32767
+          CidrIp: !Ref PublicIP
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-grafana-prometheus-sg"
+
+
+Outputs:
+  VPCId:
+    Value: !Ref MyVPC
+  PublicSubnetId:
+    Value: !Ref PublicSubnet
+  K3sJenkinsSgId:
+    Value: !Ref JenkinsK3SSecurityGroup
+  GrafanaPrometheusSgId:
+    Value: !Ref GrafanaPrometheusSecurityGroup
