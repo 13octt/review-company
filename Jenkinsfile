@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        KUBE_SERVER = 'https://52.4.165.255:6443'
+        KUBE_NAMESPACE = 'jenkins'
+        KUBE_CONTEXT = 'default'
+        KUBE_CREDENTIALS = 'k3s'
+    }
+
     stages {
         stage('Clean workspace'){
             steps{
@@ -14,45 +21,68 @@ pipeline {
             }
         }
 
-        stage('DEPLOY SERVICES TO K3S') {
+        stage('CHECK VERSION') {
             steps {
                 withKubeConfig([
-                        credentialsId: 'k3s', 
-                        serverUrl: 'https://52.4.165.255:6443',
-                        namespace: 'jenkins', 
-                        contextName: 'default',
-                ]) {
-                    sh 'k3s kubectl apply -f k8s/rabbit-deployment.yaml'
-                    sh 'k3s kubectl apply -f k8s/postgresql-deployment.yaml'
-                }
-            }
-        }
-
-        stage('DEPLOY APPLICATIONS TO K3S') {
-            steps {
-                withKubeConfig([
-                        credentialsId: 'k3s', 
-                        serverUrl: 'https://52.4.165.255:6443',
-                        namespace: 'jenkins', 
-                        contextName: 'default',
+                        credentialsId: KUBE_CREDENTIALS, 
+                        serverUrl: KUBE_SERVER,
+                        namespace: KUBE_NAMESPACE, 
+                        contextName: KUBE_CONTEXT,
                 ]) {
                     echo 'Checking version, namespace, context...'
                     sh 'k3s kubectl version'
                     sh 'k3s kubectl get ns'
                     sh 'k3s kubectl config get-contexts'
+                }
+            }
+        }
 
-                    echo 'Creating database'
+        stage('DEPLOY DATABASE TO K3S') {
+            steps {
+                withKubeConfig([
+                        credentialsId: KUBE_CREDENTIALS, 
+                        serverUrl: KUBE_SERVER,
+                        namespace: KUBE_NAMESPACE, 
+                        contextName: KUBE_CONTEXT,
+                ]) {
+                    sh 'k3s kubectl apply -f k8s/postgresql-deployment.yaml'
+                }
+            }
+        }
+
+        stage('CREATE DATABASE FOR MICROSERVICES') {
+            steps {
+                withKubeConfig([
+                        credentialsId: KUBE_CREDENTIALS, 
+                        serverUrl: KUBE_SERVER,
+                        namespace: KUBE_NAMESPACE, 
+                        contextName: KUBE_CONTEXT,
+                ]) {
+                    echo 'Waitting postgres is running...'
+                    sh 'k3s kubectl wait --for=condition=ready pod/postgres-0 -n jenkins --timeout=300s'
+                    
+                    echo 'Creating database...'
                     sh '''
                         k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'job';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE job;"
                         k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'review';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE review;"
                         k3s kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "SELECT 1 FROM pg_database WHERE datname = 'company';" | grep -q 1 || kubectl exec postgres-0 -n jenkins -- psql -U embarkx -c "CREATE DATABASE company;"
                     '''
+                }
+            }
+        }
 
-                    echo 'Deploy to k8s'
+        stage('DEPLOY APPLICATIONS TO KUBERNETES') {
+            steps {
+                withKubeConfig([
+                        credentialsId: KUBE_CREDENTIALS, 
+                        serverUrl: KUBE_SERVER,
+                        namespace: KUBE_NAMESPACE, 
+                        contextName: KUBE_CONTEXT,
+                ]) {
+                    echo 'Deploy to k3s'
                     sh 'k3s kubectl apply -f k8s/companyms-deployment.yaml'
                     sh 'k3s kubectl apply -f k8s/jobms-deployment.yaml'
                     sh 'k3s kubectl apply -f k8s/reviewms-deployment.yaml'
-
                 }
             }
         }
