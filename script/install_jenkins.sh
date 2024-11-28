@@ -24,6 +24,7 @@ sudo systemctl enable jenkins
 sudo apt install -y docker.io
 sudo systemctl start docker
 sudo systemctl enable docker
+sudo chmod 666 /var/run/docker.sock
 
 # Add Jenkins user to the Docker group
 sudo usermod -aG docker jenkins
