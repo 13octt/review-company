@@ -10,13 +10,9 @@
 
         environment {
             SCANNER_HOME        = tool 'sonar-scanner'
-            MVN_HOME            = tool 'maven-3.9.9'
             SONAR_KEY_COMPANY   = 'Company-MS'
-            SONAR_KEY_JOB       = 'Job-MS'
-            SONAR_KEY_REVIEW    = 'Review-MS'
-            SONAR_URL           = 'http://192.168.23.1:9000'
             DOCKER_REGISTRY     = 'lambaoduy1310'
-            IMAGE_TAG           = "v3.${BUILD_NUMBER}"  
+            IMAGE_TAG           = "v4.${BUILD_NUMBER}"  
         }
 
         stages {
