@@ -31,11 +31,13 @@ pipeline {
         stage('Build Job MS') {
             steps {
                 dir('jobms') {
-                    script {
-                        sh './mvnw -N io.takari:maven:wrapper || true'
-                        sh 'chmod +x ./mvnw'
-                        
-                        sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
+                    timeout(time: 10, unit: 'MINUTES') {
+                        script {
+                            sh './mvnw -N io.takari:maven:wrapper || true'
+                            sh 'chmod +x ./mvnw'
+                            
+                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
+                        }
                     }
                 }
             }
