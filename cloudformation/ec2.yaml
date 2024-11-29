@@ -7,7 +7,7 @@ Parameters:
     Type: String
   INSTANCETYPE:
     Type: String
-    Default: "t2.micro"
+    Default: "t3.medium"
   AMI:
     Type: AWS::EC2::Image::Id
     Default: "ami-0866a3c8686eaeeba"
@@ -16,16 +16,10 @@ Parameters:
     Default: "nhom14-project"
 
 Resources:
-  MyEC2KeyPair:
-    Type: AWS::EC2::KeyPair
-    Properties:
-      KeyName: "nhom14-key"
-
   JenkinsK3sEC2:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: !Ref INSTANCETYPE
-      KeyName: !Ref MyEC2KeyPair
       ImageId: !Ref AMI
       SubnetId: !Ref PublicSubnetId
       SecurityGroupIds:
@@ -35,7 +29,7 @@ Resources:
           Ebs:
             VolumeSize: 25  
             VolumeType: gp2  
-            DeleteOnTermination: true  
+            DeleteOnTermination: false  
       Tags:
         - Key: Name
           Value: !Sub "${Environment}-jenkins-k3s"
@@ -44,7 +38,6 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: !Ref INSTANCETYPE
-      KeyName: !Ref MyEC2KeyPair
       ImageId: !Ref AMI
       SubnetId: !Ref PublicSubnetId
       SecurityGroupIds:
@@ -54,14 +47,13 @@ Resources:
           Ebs:
             VolumeSize: 15  
             VolumeType: gp2  
-            DeleteOnTermination: true  
+            DeleteOnTermination: false  
       Tags:
         - Key: Name
-          Value: !Sub "${Environment}-jenkins-k3s"
-
+          Value: !Sub "${Environment}-grafana-prometheus"
  
 Outputs:
   JenkinsK3sEC2Id:
     Value: !Ref JenkinsK3sEC2
-  PrometheusGrafanEC2Id:
+  PrometheusGrafanaEC2Id:
     Value: !Ref PrometheusGrafanaEC2
