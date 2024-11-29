@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        KUBE_SERVER = 'https://98.85.24.58/:6443'
+        KUBE_SERVER = 'https://98.85.24.58:6443'
         KUBE_NAMESPACE = 'jenkins'
         KUBE_CONTEXT = 'default'
         KUBE_CREDENTIALS = 'k3s'
