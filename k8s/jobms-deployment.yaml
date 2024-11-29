@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: job
-          image: lambaoduy1310/jobms:v3.1
+          image: lambaoduy1310/jobms:v4.1
           imagePullPolicy: Always
           ports:
             - containerPort: 8082

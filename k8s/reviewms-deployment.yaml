@@ -14,7 +14,7 @@
       spec:
         containers:
           - name: review
-            image: lambaoduy1310/reviewms:v3.4
+            image: lambaoduy1310/reviewms:v4.4
             imagePullPolicy: Always
             ports:
               - containerPort: 8083
