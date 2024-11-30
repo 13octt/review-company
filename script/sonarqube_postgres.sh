@@ -25,7 +25,8 @@ sudo apt install -y wget unzip
 
 # Tải SonarQube
 echo "Downloading SonarQube..."
-SONAR_VERSION="9.7.1.62043"
+# SONAR_VERSION="9.7.1.62043"
+SONAR_VERSION="10.7.0.96327"
 wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${SONAR_VERSION}.zip
 
 # Giải nén SonarQube
