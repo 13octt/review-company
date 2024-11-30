@@ -5,7 +5,10 @@ Parameters:
     Type: String
   GrafanaPrometheusSecurityGroup:
     Type: String
-  INSTANCETYPE:
+  INSTANCELARGE:
+    Type: String
+    Default: "t3.large"
+  INSTANCEMEDIUM:
     Type: String
     Default: "t3.medium"
   AMI:
@@ -19,7 +22,7 @@ Resources:
   JenkinsK3sEC2:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: !Ref INSTANCETYPE
+      InstanceType: !Ref INSTANCELARGE
       ImageId: !Ref AMI
       SubnetId: !Ref PublicSubnetId
       SecurityGroupIds:
@@ -29,15 +32,17 @@ Resources:
           Ebs:
             VolumeSize: 25  
             VolumeType: gp2  
-            DeleteOnTermination: false  
+            DeleteOnTermination: false 
       Tags:
         - Key: Name
           Value: !Sub "${Environment}-jenkins-k3s"
 
+
+
   PrometheusGrafanaEC2:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: !Ref INSTANCETYPE
+      InstanceType: !Ref INSTANCEMEDIUM
       ImageId: !Ref AMI
       SubnetId: !Ref PublicSubnetId
       SecurityGroupIds:
@@ -47,10 +52,11 @@ Resources:
           Ebs:
             VolumeSize: 15  
             VolumeType: gp2  
-            DeleteOnTermination: false  
+            DeleteOnTermination: false 
       Tags:
         - Key: Name
           Value: !Sub "${Environment}-grafana-prometheus"
+
  
 Outputs:
   JenkinsK3sEC2Id:
