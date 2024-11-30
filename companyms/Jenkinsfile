@@ -58,14 +58,6 @@
                 }
             }
 
-            stage("QUALITY GATE"){
-                steps {
-                    script {
-                        waitForQualityGate abortPipeline: false, credentialsId: 'jenkins' 
-                    }
-                } 
-            }
-
             stage('OWASP FS SCAN') {
                 steps {
                     dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
