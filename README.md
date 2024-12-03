@@ -1,72 +1,64 @@
-# Review Company Microservices App with DevOps Jenkins CI/CD Pipline, Security with Trivy, SonaryQube and Deploys with Docker and K8s
+# Review Company Microservices App with DevOps Tools (Jenkins, Docker, K3S) Intergated With Security (SonarQube, Trivy) and Monitoring (Prometheus, Grafana) 
 
-## Install Jenkins and SonarQube with Docker Compose and Dockerfile
+## Diagram
 
 <p align="center">
-  <img src="images/docker/install-jenkins-sonarqube.png" alt="Console Output">
+  <img src="images/project-images/nt548-diagram.png" alt="Console Output">
   <br>
-  <em>Install Dependencies and Build code Succesfully</em>
+  <em>Cloud Formation Stack</em>
+</p>
+
+## Create Infrastructure with CloudFormation Stack
+
+<p align="center">
+  <img src="images/project-images/cloudformation-stack.png" alt="Console Output">
+  <br>
+  <em>Cloud Formation Stack</em>
+</p>
+
+<p align="center">
+  <img src="images/project-images/vpc-stack.png" alt="Console Output">
+  <br>
+  <em>VPC Stack</em>
+</p>
+
+<p align="center">
+  <img src="images/project-images/ec2-stack.png" alt="Console Output">
+  <br>
+  <em>EC2 Stack</em>
 </p>
 
 ## Jenkins Pipeline
 
 <p align="center">
-  <img src="images/jenkins/companyms/pipeline-companyms.png" alt="Company Microservices Pipeline Step">
+  <img src="images/project-images/jenkins-pipeline.png" alt="Company Microservices Pipeline Step">
   <br>
   <em>Company Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
-  <img src="images/jenkins/jobms/pipeline-jobms.png" alt="Job Microservices Pipeline Step">
+  <img src="images/project-images/build-microservices-stage.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Job Microservices Pipeline Step</em>
+  <em>Company Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
-  <img src="images/jenkins/reviewms/pipeline-reviewms.png" alt="Review Microservices Pipeline Step">
+  <img src="images/project-images/build-job-ms.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Review Microservices Pipeline Step</em>
-</p>
-
-## Console Output for each Microservies
-
-<p align="center">
-  <img src="images/jenkins/companyms/install-deps-and-build-code-companyms.png" alt="Console Output">
-  <br>
-  <em>Install Dependencies and Build code Succesfully</em>
+  <em>Company Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
-  <img src="images/jenkins/companyms/sonar-scanner-companyms.png" alt="Console Output">
+  <img src="images/project-images/build-review-ms.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Scan code with Sonar Scanner</em>
+  <em>Company Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
-  <img src="images/jenkins/companyms/trivy-scan-fs-companyms.png" alt="Console Output">
+  <img src="images/project-images/deploy-to-k3s-stage.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Scan code with Trivy</em>
+  <em>Company Microservices Pipeline Step</em>
 </p>
-
-<p align="center">
-  <img src="images/jenkins/companyms/push-image-to-dockerhub-companyms.png" alt="Console Output">
-  <br>
-  <em>Login and push docker image to Docker Hub</em>
-</p>
-
-<p align="center">
-  <img src="images/jenkins/companyms/trivy-scan-dockerimage-companyms.png" alt="Console Output">
-  <br>
-  <em>Install Dependencies and Build code Succesfully</em>
-</p>
-
-<p align="center">
-  <img src="images/jenkins/companyms/pipeline-successfully-companyms.png" alt="Console Output">
-  <br>
-  <em>Pipeline Successfully</em>
-</p>
-
-> Console Output tương tự với Job Microservice và Review Microservice.
 
 ## SonarQube
 
@@ -84,10 +76,40 @@
   <em>Docker Hub</em>
 </p>
 
-## Minikube 
+## K3S
 
 <p align="center">
-  <img src="images/k8s/get-resource-k8s.png" alt="Docker Hub">
+  <img src="images/project-images/config-ns-token.png" alt="Docker Hub">
   <br>
-  <em>Docker Hub</em>
+  <em>K3S</em>
 </p>
+
+<p align="center">
+  <img src="images/project-images/k3s-get-all.png" alt="Docker Hub">
+  <br>
+  <em>Resource K3S</em>
+</p>
+
+## Prometheus
+
+<p align="center">
+  <img src="images/project-images/prometheus.png" alt="Docker Hub">
+  <br>
+  <em>Prometheus Job</em>
+</p>
+
+## Grafana
+
+<p align="center">
+  <img src="images/project-images/node-exporter.png" alt="Docker Hub">
+  <br>
+  <em>Node Exporter Dashboard</em>
+</p>
+
+<p align="center">
+  <img src="images/project-images/microservices-monitor.png" alt="Docker Hub">
+  <br>
+  <em>Microservices Application Dashboard</em>
+</p>
+
+
