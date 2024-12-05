@@ -37,6 +37,21 @@ pipeline {
             }
         }
 
+        stage('Build Job MS') {
+            steps {
+                dir('jobms') {
+                    timeout(time: 10, unit: 'MINUTES') {
+                        script {
+                            sh './mvnw -N io.takari:maven:wrapper || true'
+                            sh 'chmod +x ./mvnw'
+                            
+                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
+                        }
+                    }
+                }
+            }
+        }
+
         stage('SonarQube Analys for Job MS') {
             steps {
                 dir('jobms'){
@@ -47,21 +62,6 @@ pipeline {
                                 ${SCANNER_HOME}/bin/sonar-scanner \
                                     -Dsonar.java.binaries=target/classes \
                             """
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Build Job MS') {
-            steps {
-                dir('jobms') {
-                    timeout(time: 10, unit: 'MINUTES') {
-                        script {
-                            sh './mvnw -N io.takari:maven:wrapper || true'
-                            sh 'chmod +x ./mvnw'
-                            
-                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
                         }
                     }
                 }
