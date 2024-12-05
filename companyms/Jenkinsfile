@@ -43,8 +43,10 @@
                         script {
                             withSonarQubeEnv('sonar-server') {
                                 sh '${SCANNER_HOME}/bin/sonar-scanner --version'
+                                sh 'mvn clean install'
                                 sh """
                                     ${SCANNER_HOME}/bin/sonar-scanner \
+                                        -Dsonar.java.binaries=target/classes \
                                 """
                             }
                         }
