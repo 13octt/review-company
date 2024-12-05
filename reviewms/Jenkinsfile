@@ -28,15 +28,11 @@ pipeline {
             }
         }
 
-        stage('Build Review MS') {
+        stage('TRIVY FS SCAN') {
             steps {
-                dir('reviewms') {
-                    script {
-                        sh './mvnw -N io.takari:maven:wrapper || true'
-                        sh 'chmod +x ./mvnw'
-
-                        sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG}'
-                    }
+                dir('reviewms'){
+                    echo 'Scanning Files System...'
+                    sh "trivy fs ."
                 }
             }
         }
@@ -57,10 +53,16 @@ pipeline {
             }
         }
 
-        stage('TRIVY FS SCAN') {
+        stage('Build Review MS') {
             steps {
-                echo 'Scanning Files System...'
-                sh "trivy fs ."
+                dir('reviewms') {
+                    script {
+                        sh './mvnw -N io.takari:maven:wrapper || true'
+                        sh 'chmod +x ./mvnw'
+
+                        sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG}'
+                    }
+                }
             }
         }
 

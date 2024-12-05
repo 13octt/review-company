@@ -28,21 +28,14 @@ pipeline {
             }
         }
 
-        stage('Build Job MS') {
+        stage('TRIVY FS SCAN') {
             steps {
                 dir('jobms') {
-                    timeout(time: 10, unit: 'MINUTES') {
-                        script {
-                            sh './mvnw -N io.takari:maven:wrapper || true'
-                            sh 'chmod +x ./mvnw'
-                            
-                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
-                        }
-                    }
+                    echo 'Scanning Files System...'
+                    sh "trivy fs ."
                 }
             }
         }
-
 
         stage('SonarQube Analys for Job MS') {
             steps {
@@ -60,10 +53,18 @@ pipeline {
             }
         }
 
-        stage('TRIVY FS SCAN') {
+        stage('Build Job MS') {
             steps {
-                echo 'Scanning Files System...'
-                sh "trivy fs ."
+                dir('jobms') {
+                    timeout(time: 10, unit: 'MINUTES') {
+                        script {
+                            sh './mvnw -N io.takari:maven:wrapper || true'
+                            sh 'chmod +x ./mvnw'
+                            
+                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/jobms:${IMAGE_TAG}'
+                        }
+                    }
+                }
             }
         }
 

@@ -28,20 +28,15 @@
                 }
             }
 
-            stage('Build Company MS') {
+            stage('TRIVY FS SCAN') {
                 steps {
                     dir('companyms') {
-                        script {
-                            sh './mvnw -N io.takari:maven:wrapper || true'
-                            sh 'chmod +x ./mvnw'
-                            
-                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/companyms:${IMAGE_TAG}'
-                        }
+                        echo 'Scanning Files System...'
+                        sh "trivy fs ."
                     }
                 }
             }
 
-            
             stage('SonarQube Analys for Company MS') {
                 steps {
                     dir('companyms'){
@@ -58,10 +53,16 @@
                 }
             }
 
-            stage('TRIVY FS SCAN') {
+            stage('Build Company MS') {
                 steps {
-                    echo 'Scanning Files System...'
-                    sh "trivy fs ."
+                    dir('companyms') {
+                        script {
+                            sh './mvnw -N io.takari:maven:wrapper || true'
+                            sh 'chmod +x ./mvnw'
+                            
+                            sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/companyms:${IMAGE_TAG}'
+                        }
+                    }
                 }
             }
 
