@@ -37,6 +37,19 @@ pipeline {
             }
         }
 
+        stage('Build Review MS') {
+            steps {
+                dir('reviewms') {
+                    script {
+                        sh './mvnw -N io.takari:maven:wrapper || true'
+                        sh 'chmod +x ./mvnw'
+
+                        sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG}'
+                    }
+                }
+            }
+        }
+
         stage('SonarQube Analys for Review MS') {
             steps {
                 dir('reviewms'){
@@ -48,19 +61,6 @@ pipeline {
                                     -Dsonar.java.binaries=target/classes \
                             """
                         }
-                    }
-                }
-            }
-        }
-
-        stage('Build Review MS') {
-            steps {
-                dir('reviewms') {
-                    script {
-                        sh './mvnw -N io.takari:maven:wrapper || true'
-                        sh 'chmod +x ./mvnw'
-
-                        sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/reviewms:${IMAGE_TAG}'
                     }
                 }
             }
