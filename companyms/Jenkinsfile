@@ -37,23 +37,6 @@
                 }
             }
 
-            stage('SonarQube Analys for Company MS') {
-                steps {
-                    dir('companyms'){
-                        script {
-                            withSonarQubeEnv('sonar-server') {
-                                sh '${SCANNER_HOME}/bin/sonar-scanner --version'
-                                sh 'mvn clean install'
-                                sh """
-                                    ${SCANNER_HOME}/bin/sonar-scanner \
-                                        -Dsonar.java.binaries=target/classes \
-                                """
-                            }
-                        }
-                    }
-                }
-            }
-
             stage('Build Company MS') {
                 steps {
                     dir('companyms') {
@@ -62,6 +45,22 @@
                             sh 'chmod +x ./mvnw'
                             
                             sh './mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY}/companyms:${IMAGE_TAG}'
+                        }
+                    }
+                }
+            }
+
+            stage('SonarQube Analys for Company MS') {
+                steps {
+                    dir('companyms'){
+                        script {
+                            withSonarQubeEnv('sonar-server') {
+                                sh '${SCANNER_HOME}/bin/sonar-scanner --version'
+                                sh """
+                                    ${SCANNER_HOME}/bin/sonar-scanner \
+                                        -Dsonar.java.binaries=target/classes \
+                                """
+                            }
                         }
                     }
                 }
