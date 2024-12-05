@@ -45,7 +45,6 @@
                                 sh '${SCANNER_HOME}/bin/sonar-scanner --version'
                                 sh """
                                     ${SCANNER_HOME}/bin/sonar-scanner \
-                                        -Dsonar.java.binaries=target/classes \
                                 """
                             }
                         }
