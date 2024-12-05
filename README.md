@@ -1,12 +1,15 @@
 # Review Company Microservices App with DevOps Tools (Jenkins, Docker, K3S) Intergated With Security (SonarQube, Trivy) and Monitoring (Prometheus, Grafana) 
 
-## Diagram
+## System building process
 
 <p align="center">
   <img src="images/project-images/nt548-diagram.png" alt="Console Output">
   <br>
-  <em>Cloud Formation Stack</em>
+  <em>System building process</em>
 </p>
+
+## Demo
+https://drive.google.com/drive/folders/1SB27Nu54opv8osg-UCYNrRhS6b0_iMfX?usp=drive_link
 
 ## Create Infrastructure with CloudFormation Stack
 
@@ -33,25 +36,25 @@
 <p align="center">
   <img src="images/project-images/jenkins-pipeline.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Company Microservices Pipeline Step</em>
+  <em>Jenkins Pipeline CI/CD</em>
 </p>
 
 <p align="center">
-  <img src="images/project-images/build-microservices-stage.png" alt="Company Microservices Pipeline Step">
+  <img src="images/project-images/pipeline-companyms.png" alt="Company Microservices Pipeline Step">
   <br>
   <em>Company Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
-  <img src="images/project-images/build-job-ms.png" alt="Company Microservices Pipeline Step">
+  <img src="images/project-images/pipeline-jobms.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Company Microservices Pipeline Step</em>
+  <em>Job Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
-  <img src="images/project-images/build-review-ms.png" alt="Company Microservices Pipeline Step">
+  <img src="images/project-images/pipeline-reviewms.png" alt="Company Microservices Pipeline Step">
   <br>
-  <em>Company Microservices Pipeline Step</em>
+  <em>Review Microservices Pipeline Step</em>
 </p>
 
 <p align="center">
@@ -81,7 +84,7 @@
 <p align="center">
   <img src="images/project-images/config-ns-token.png" alt="Docker Hub">
   <br>
-  <em>K3S</em>
+  <em>K3S Config</em>
 </p>
 
 <p align="center">
