@@ -3,7 +3,7 @@
 ## System building process
 
 <p align="center">
-  <img src="images/project-images/nt548-diagram.png" alt="Console Output">
+  <img src="images/project-images/nt548-diagram (1).png" alt="Console Output">
   <br>
   <em>System building process</em>
 </p>
